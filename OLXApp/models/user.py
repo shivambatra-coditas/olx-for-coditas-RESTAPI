@@ -30,6 +30,12 @@ class UserModel(db.Model) :
     def verify_password(self , password) :
         return bcrypt.check_password_hash(self.password , password)
 
+    def is_user_exists(self) :
+        user = UserModel.query.filter_by(email=self.email).first()
+        if user :
+            return True
+        return False
+
     # for token based authentication
     def generate_auth_token(self, expiration=60) :
         s = Serializer(app.config["SECRET_KEY"] , expires_in=expiration)
