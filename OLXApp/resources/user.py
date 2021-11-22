@@ -14,8 +14,6 @@ class Users(Resource) :
         return {"users" : users}
     def post(self) :
         user_data = request.get_json()
-        if request.files :
-            print("Files are Available")
         user = UserModel(
             name = user_data['name'],
             gender = user_data['gender'],
@@ -23,11 +21,11 @@ class Users(Resource) :
             email = user_data['email'],
         )
         # # saves password hash
-        # user.hash_password(user_data["password"])
-        # if user.is_user_exists() :
-        #     return {"message" : "User Already Exists"}
-        # db.session.add(user)
-        # db.session.commit()
+        user.hash_password(user_data["password"])
+        if user.is_user_exists() :
+            return {"message" : "User Already Exists"}
+        db.session.add(user)
+        db.session.commit()
         return {"user" : user.get_JSON() ,"message" : "User Registered Successfully"}
 
 
